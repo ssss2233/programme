@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.Random;
 
 /**
  * <p>
@@ -43,7 +42,7 @@ public class UserController {
     @PostMapping("code")
     public Result sendCode(@RequestParam("phone") String phone, HttpSession session) {
         // TODO 发送短信验证码并保存验证码
-        return userService.sendcode(phone,session);
+        return userService.sendCode(phone,session);
     }
 
     /**
@@ -70,9 +69,7 @@ public class UserController {
     public Result me(){
         // TODO 获取当前登录的用户并返回
         UserDTO user = UserHolder.getUser();
-        if (user == null) {
-            return Result.fail("用户未登录");
-        }
+
         return Result.ok(user);
     }
 

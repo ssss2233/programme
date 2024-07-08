@@ -1,34 +1,31 @@
 package com.hmdp.utils;
-
+import cn.hutool.core.bean.BeanUtil;
 import com.hmdp.dto.UserDTO;
 import com.hmdp.entity.User;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.util.Map;
+
+import static com.hmdp.utils.RedisConstants.LOGIN_USER_KEY;
+
 @Slf4j
-public class LoginInterceptor implements HandlerInterceptor {
+public class LoginInterceptor extends HandlerInterceptorAdapter {
+    // TODO 实现登录拦截器
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 1.判断用户是否登录
-        HttpSession session = request.getSession();
-        Object user = session.getAttribute("user");
-        log.info("user:{}", user);
-        if (user == null) {
-            // 2.未登录，跳转到登录页面
+        // 获取session中的user对象
+        // Object user = request.getSession().getAttribute("user");
+        UserDTO userDTO = UserHolder.getUser();
+        if (userDTO == null) {
             response.setStatus(401);
             return false;
         }
-        UserHolder.saveUser((UserDTO) user);
-        // 3.已登录，放行
         return true;
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        UserHolder.removeUser();
     }
 }
