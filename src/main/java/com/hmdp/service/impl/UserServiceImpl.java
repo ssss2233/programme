@@ -82,7 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         Map<String,Object> usermap = BeanUtil.beanToMap(userDTO,new HashMap<>(),
                 CopyOptions.create()
                         .setIgnoreNullValue(true)
-                        .setFieldValueEditor((fieldName,fieldValue) -> fieldValue.toString()));
+                        .setFieldValueEditor((fieldName,fieldValue) -> fieldValue != null ? fieldValue.toString() : null));
 
         stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + token, usermap);
         log.info("用户登录成功，token:{}",LOGIN_USER_KEY+token);
